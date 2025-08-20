@@ -1,0 +1,32 @@
+spring:
+  datasource:
+    # url: đường dẫn JDBC để kết nối. Ở đây DB chạy trên localhost (máy cục bộ) với port 3307 và tên DB
+    url: jdbc:mysql://localhost:3307/ministop
+    # username: tài khoản đăng nhập MySQL (ở đây là root).
+    username: root
+    # password: mật khẩu để đăng nhập (admin123).
+    password: admin123
+    # driver-class-name: class driver JDBC cho MySQL (com.mysql.cj.jdbc.Driver).
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    # show-sql: true → in ra console các câu SQL Hibernate sinh ra khi chạy (debug rất hữu ích).
+    show-sql: true
+    hibernate:
+      # ddl-auto: validate → chỉ kiểm tra xem entity mapping trong code có khớp với cấu trúc bảng trong DB không.
+        # none: không làm gì cả.
+        # validate: chỉ kiểm tra, không thay đổi DB.
+        # update: cập nhật schema DB dựa theo entity (nguy hiểm ở production).
+        # create: xóa DB cũ, tạo lại mới khi chạy.
+        # create-drop: giống create, nhưng khi tắt app thì drop DB.
+      ddl-auto: validate
+    properties:
+      hibernate:
+        # dialect.MySQL8Dialect → giúp Hibernate sinh ra SQL tương thích với MySQL 8.
+        dialect: org.hibernate.dialect.MySQL8Dialect
+server:
+  servlet:
+    # context-path: /api → nghĩa là tất cả API của bạn sẽ chạy dưới prefix /api.
+    context-path: /api
+file:
+  # upload-dir: /Users/daoho/Desktop/image → định nghĩa đường dẫn thư mục trên máy tính dùng để lưu file (ví dụ khi upload ảnh sản phẩm).
+  upload-dir: /Users/daoho/Desktop/image
