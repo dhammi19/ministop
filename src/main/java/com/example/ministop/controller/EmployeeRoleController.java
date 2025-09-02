@@ -1,6 +1,7 @@
 package com.example.ministop.controller;
 
 import com.example.ministop.entity.EmployeeRole;
+import com.example.ministop.payload.response.DataResponse;
 import com.example.ministop.service.EmployeeRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -63,9 +64,63 @@ public class EmployeeRoleController {
     @Autowired
     EmployeeRoleService employeeRoleService;
 
+    // Đây là annotation của Spring MVC.
+    // Nghĩa là: Khi client gửi request GET /api/employee-role/show, thì method này sẽ được gọi.
     @GetMapping("/show")
-    public ResponseEntity<?> showEmployeeRoles() {
+    // ResponseEntity<T>: lớp của Spring dùng để trả về HTTP response đầy đủ
+    // (bao gồm body + status code + header).
+    // DataResponse: là class wrapper bạn đã định nghĩa (statusCode, success, description, data).
+    public ResponseEntity<DataResponse> showEmployeeRoles() {
+        //Gọi tới service layer (employeeRoleService) để lấy dữ liệu từ database.
+        //getEmployeeRoles() thường sẽ gọi xuống repository (DAO) để fetch danh sách EmployeeRole.
+        //Kết quả lưu vào employeeRoles.
         List<EmployeeRole> employeeRoles = employeeRoleService.getEmployeeRoles();
-        return new ResponseEntity<>(employeeRoles, HttpStatus.OK);
+
+        // Tạo một object DataResponse mới. Đây sẽ là response chuẩn hóa mà bạn trả về cho client.
+        DataResponse response = new DataResponse();
+        // Gán statusCode = 200.
+        // HttpStatus.OK.value() chính là số 200 (HTTP status code cho “OK”).
+        response.setStatusCode(HttpStatus.OK.value());
+        // Đánh dấu response là thành công (true).
+        // Client chỉ cần check success=true/false để biết kết quả mà không cần phân tích sâu status code.
+        response.setSuccess(true);
+        // Ghi chú thêm một mô tả qngắn gọn để client dễ hiểu kết quả.
+        // Ví dụ: "Get employee roles successfully".
+        // Nếu lỗi, bạn có thể set message khác, ví dụ "No roles found" hoặc "Database error".
+        response.setDescription("Get employee roles successfully");
+        // data chính là payload thực sự: danh sách các EmployeeRole.
+        // Đây mới là dữ liệu mà client cần.
+        response.setData(employeeRoles);
+
+        // Trả về HTTP Response với status code 200 OK và body là response (DataResponse).
+        // Thay vì return new ResponseEntity<>(response, HttpStatus.OK);, bạn dùng helper
+        // ResponseEntity.ok(...) cho gọn.
+        return ResponseEntity.ok(response);
     }
+
+    /*
+        ---------- Tại sao phải trả về 2 chỗ chứa status code: ----------
+
+        1. ResponseEntity → đây là HTTP status code (ví dụ: 200, 400, 404, 500).
+            - Đây là chuẩn HTTP, được browser, Postman, client-side framework (React, Angular,
+            mobile app) dùng để biết kết quả request có thành công hay không.
+            - Ví dụ:
+                + 200 OK → thành công
+                + 404 Not Found → không tìm thấy
+                + 500 Internal Server Error → lỗi server
+
+        2. DataResponse.statusCode → đây là application-level status code
+        (do bạn tự định nghĩa trong JSON trả về).
+            - Nó nằm trong body response, chứ không phải HTTP header.
+            - Mục đích: client có thể xử lý chi tiết hơn dựa trên business logic.
+            - Ví dụ:
+                + 1000 → Lấy dữ liệu thành công
+                + 1001 → Không tìm thấy nhân viên
+                + 1002 → Role không tồn tại
+                + 2000 → Lỗi xác thực
+
+        3. Lý do cần cả 2 là vì:
+            - HTTP status code: dùng để phân biệt lỗi ở mức HTTP (thành công hay thất bại chung).
+            - Application status code: dùng để mô tả chi tiết hơn về ngữ cảnh trong ứng dụng.
+    */
 }
