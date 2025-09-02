@@ -1,14 +1,13 @@
 package com.example.ministop.controller;
 
 import com.example.ministop.entity.EmployeeRole;
+import com.example.ministop.payload.request.EmployeeRoleRequest;
 import com.example.ministop.payload.response.DataResponse;
 import com.example.ministop.service.EmployeeRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -96,6 +95,54 @@ public class EmployeeRoleController {
         // Thay vì return new ResponseEntity<>(response, HttpStatus.OK);, bạn dùng helper
         // ResponseEntity.ok(...) cho gọn.
         return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/add")
+    public ResponseEntity<DataResponse> addAnEmployeeRole(@RequestBody EmployeeRoleRequest request) {
+        boolean isCreated = employeeRoleService.addEmployeeRole(request);
+
+        DataResponse response = new DataResponse();
+
+        if (isCreated) {
+            response.setStatusCode(HttpStatus.CREATED.value());
+            response.setSuccess(true);
+            response.setDescription("Employee role created successfully");
+            response.setData(request);
+
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        } else {
+            response.setStatusCode(HttpStatus.CONFLICT.value()); // 409 Conflict
+            response.setSuccess(false);
+            response.setDescription("RoleId already exists: " + request.getRoleId());
+            response.setData(null);
+
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        }
+    }
+
+    @PutMapping("/update/{roleId}")
+    public ResponseEntity<DataResponse> updateEmployeeRole(
+            @PathVariable String roleId,
+            @RequestBody EmployeeRoleRequest request) {
+        boolean isUpdated = employeeRoleService.updateEmployeeRole(roleId, request);
+
+        DataResponse response = new DataResponse();
+
+        if (isUpdated) {
+            response.setStatusCode(HttpStatus.OK.value());
+            response.setSuccess(true);
+            response.setDescription("Employee role updated successfully");
+            response.setData(request);
+
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        } else {
+            response.setStatusCode(HttpStatus.NOT_FOUND.value());
+            response.setSuccess(false);
+            response.setDescription("Couldn't update the role");
+            response.setData(null);
+
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        }
     }
 
     /*
