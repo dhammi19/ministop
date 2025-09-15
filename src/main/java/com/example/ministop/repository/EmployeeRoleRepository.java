@@ -8,4 +8,5 @@ import java.util.List;
 
 @Repository
 public interface EmployeeRoleRepository extends JpaRepository<EmployeeRole, String> {
+    List<EmployeeRole> getEmployeeRoleByRoleId(String roleId);
 }

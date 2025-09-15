@@ -169,6 +169,30 @@ public class EmployeeRoleController {
         }
     }
 
+    @GetMapping("/{roleId}")
+    public ResponseEntity<DataResponse> getEmployeeRoleById(
+            @PathVariable String roleId) {
+        List<EmployeeRole> employeeRoles = employeeRoleService.getEmployeeRoleById(roleId);
+
+        DataResponse response = new DataResponse();
+
+        if (employeeRoles.isEmpty()) {
+            response.setStatusCode(HttpStatus.NOT_FOUND.value());
+            response.setSuccess(false);
+            response.setDescription("Couldn't find employee role id");
+            response.setData(null);
+
+            return ResponseEntity.ok(response);
+        } else {
+            response.setStatusCode(HttpStatus.OK.value());
+            response.setSuccess(true);
+            response.setDescription("Get employee roles successfully");
+            response.setData(employeeRoles);
+
+            return ResponseEntity.ok(response);
+        }
+    }
+
     /*
         ---------- Tại sao phải trả về 2 chỗ chứa status code: ----------
 

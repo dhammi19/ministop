@@ -10,4 +10,5 @@ public interface EmployeeRoleService {
     boolean addEmployeeRole(EmployeeRoleRequest request);
     boolean updateEmployeeRole(String roleId, EmployeeRoleRequest request);
     boolean deleteEmployeeRole(String roleId);
+    List<EmployeeRole> getEmployeeRoleById(String roleId);
 }

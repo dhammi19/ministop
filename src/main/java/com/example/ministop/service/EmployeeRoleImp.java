@@ -51,4 +51,9 @@ public class EmployeeRoleImp implements EmployeeRoleService{
             return true;
         }
     }
+
+    @Override
+    public List<EmployeeRole> getEmployeeRoleById(String roleId) {
+        return employeeRoleRepository.getEmployeeRoleByRoleId(roleId);
+    }
 }
