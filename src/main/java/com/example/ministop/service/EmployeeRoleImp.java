@@ -41,4 +41,14 @@ public class EmployeeRoleImp implements EmployeeRoleService{
             return true;
         }).orElse(false);
     }
+
+    @Override
+    public boolean deleteEmployeeRole(String roleId) {
+        if (!employeeRoleRepository.existsById(roleId)) {
+            return false;
+        } else {
+            employeeRoleRepository.deleteById(roleId);
+            return true;
+        }
+    }
 }

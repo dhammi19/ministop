@@ -65,7 +65,7 @@ public class EmployeeRoleController {
 
     // Đây là annotation của Spring MVC.
     // Nghĩa là: Khi client gửi request GET /api/employee-role/show, thì method này sẽ được gọi.
-    @GetMapping("/show")
+    @GetMapping("")
     // ResponseEntity<T>: lớp của Spring dùng để trả về HTTP response đầy đủ
     // (bao gồm body + status code + header).
     // DataResponse: là class wrapper bạn đã định nghĩa (statusCode, success, description, data).
@@ -97,7 +97,7 @@ public class EmployeeRoleController {
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/add")
+    @PostMapping("")
     public ResponseEntity<DataResponse> addAnEmployeeRole(@RequestBody EmployeeRoleRequest request) {
         boolean isCreated = employeeRoleService.addEmployeeRole(request);
 
@@ -120,7 +120,7 @@ public class EmployeeRoleController {
         }
     }
 
-    @PutMapping("/update/{roleId}")
+    @PutMapping("/{roleId}")
     public ResponseEntity<DataResponse> updateEmployeeRole(
             @PathVariable String roleId,
             @RequestBody EmployeeRoleRequest request) {
@@ -139,6 +139,30 @@ public class EmployeeRoleController {
             response.setStatusCode(HttpStatus.NOT_FOUND.value());
             response.setSuccess(false);
             response.setDescription("Couldn't update the role");
+            response.setData(null);
+
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        }
+    }
+
+    @DeleteMapping("/{roleId}")
+    public ResponseEntity<DataResponse> deleteEmployee(
+            @PathVariable String roleId) {
+        boolean isDeleted = employeeRoleService.deleteEmployeeRole(roleId);
+
+        DataResponse response = new DataResponse();
+
+        if (isDeleted) {
+            response.setStatusCode(HttpStatus.OK.value());
+            response.setSuccess(true);
+            response.setDescription("Employee role deleted successfully");
+            response.setData("Employee role id just deleted: "+roleId);
+
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        } else {
+            response.setStatusCode(HttpStatus.NOT_FOUND.value());
+            response.setSuccess(false);
+            response.setDescription("Couldn't delete the role");
             response.setData(null);
 
             return ResponseEntity.status(HttpStatus.OK).body(response);
