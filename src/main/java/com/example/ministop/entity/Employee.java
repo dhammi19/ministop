@@ -61,6 +61,9 @@ public class Employee {
     @OneToMany(mappedBy = "employee")
     private Set<Invoice> invoices;
 
+    @Column(name = "password")
+    private String password;
+
     public String getEmployeeId() {
         return employeeId;
     }
@@ -115,5 +118,13 @@ public class Employee {
 
     public void setInvoices(Set<Invoice> invoices) {
         this.invoices = invoices;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

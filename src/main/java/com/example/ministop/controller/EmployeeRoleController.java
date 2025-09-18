@@ -64,7 +64,7 @@ public class EmployeeRoleController {
     EmployeeRoleService employeeRoleService;
 
     // Đây là annotation của Spring MVC.
-    // Nghĩa là: Khi client gửi request GET /api/employee-role/show, thì method này sẽ được gọi.
+    // Nghĩa là: Khi client gửi request GET /api/employee-role, thì method này sẽ được gọi.
     @GetMapping("")
     // ResponseEntity<T>: lớp của Spring dùng để trả về HTTP response đầy đủ
     // (bao gồm body + status code + header).
