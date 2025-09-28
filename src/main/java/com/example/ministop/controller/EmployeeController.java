@@ -86,4 +86,27 @@ public class EmployeeController {
             return ResponseEntity.status(HttpStatus.OK).body(dataResponse);
         }
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<DataResponse> showAnEmployee(@PathVariable String id) {
+        List<EmployeeResponse> employeeList = employeeService.getAnEmployee(id);
+
+        DataResponse response = new DataResponse();
+
+        if (employeeList.isEmpty()) {
+            response.setStatusCode(HttpStatus.NOT_FOUND.value());
+            response.setSuccess(false);
+            response.setDescription("Couldn't find the employee");
+            response.setData(null);
+
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        } else {
+            response.setStatusCode(HttpStatus.OK.value());
+            response.setSuccess(true);
+            response.setDescription("The employee found");
+            response.setData(employeeList);
+
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        }
+    }
 }

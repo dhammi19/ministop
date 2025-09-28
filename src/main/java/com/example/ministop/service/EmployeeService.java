@@ -10,4 +10,5 @@ public interface EmployeeService {
     boolean isLoggedIn(EmployeeLoginRequest employeeLoginRequest);
     List<EmployeeResponse> getEmployees();
     boolean addEmployee(Employee employee);
+    List<EmployeeResponse> getAnEmployee(String id);
 }

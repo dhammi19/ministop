@@ -67,4 +67,25 @@ public class EmployeeImp implements EmployeeService {
             return true;
         }
     }
+
+    @Override
+    public List<EmployeeResponse> getAnEmployee(String id) {
+        List<Employee> employees = employeeRepository.getEmployeesByEmployeeId(id);
+        List<EmployeeResponse> employeesResponseList = new ArrayList<>();
+
+        for (Employee employee : employees) {
+            employeesResponseList.add(
+                    new EmployeeResponse(
+                            employee.getEmployeeId(),
+                            employee.getFullName(),
+                            employee.getBirthDate(),
+                            employee.getGender(),
+                            employee.getPhoneNumber(),
+                            employee.getEmployeeRole().getRoleName()
+                    )
+            );
+        }
+
+        return employeesResponseList;
+    }
 }
