@@ -121,4 +121,19 @@ public class EmployeeImp implements EmployeeService {
         employeeRepository.save(existing);
         return true;
     }
+
+    @Override
+    public boolean deleteEmployee(String id) {
+        if (!employeeRepository.existsById(id)) {
+            return false;
+        }
+
+        employeeRepository.deleteById(id);
+        return true;
+    }
+
+    @Override
+    public List<Employee> searchEmployees(String keyword) {
+        return employeeRepository.searchAllFields(keyword);
+    }
 }

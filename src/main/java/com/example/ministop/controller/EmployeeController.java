@@ -133,4 +133,43 @@ public class EmployeeController {
             return ResponseEntity.status(HttpStatus.OK).body(response);
         }
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<DataResponse> deleteEmployee(@PathVariable String id) {
+        boolean isDeleted = employeeService.deleteEmployee(id);
+
+        DataResponse response = new DataResponse();
+
+        if (isDeleted) {
+            response.setStatusCode(HttpStatus.NO_CONTENT.value());
+            response.setSuccess(true);
+            response.setDescription("Employee deleted");
+            response.setData(null);
+
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        } else {
+            response.setStatusCode(HttpStatus.NOT_FOUND.value());
+            response.setSuccess(false);
+            response.setDescription("Deleting failed");
+            response.setData(null);
+
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        }
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<DataResponse> searchEmployees(
+            @RequestParam String keyword
+    ) {
+        List<Employee> employees = employeeService.searchEmployees(keyword);
+
+        DataResponse response = new DataResponse();
+
+        response.setStatusCode(HttpStatus.OK.value());
+        response.setSuccess(true);
+        response.setDescription("searched successfully");
+        response.setData(employees);
+
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
 }
