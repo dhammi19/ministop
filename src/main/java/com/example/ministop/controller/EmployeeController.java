@@ -2,6 +2,7 @@ package com.example.ministop.controller;
 
 import com.example.ministop.entity.Employee;
 import com.example.ministop.payload.request.EmployeeLoginRequest;
+import com.example.ministop.payload.request.EmployeeRequest;
 import com.example.ministop.payload.response.DataResponse;
 import com.example.ministop.payload.response.EmployeeResponse;
 import com.example.ministop.service.EmployeeService;
@@ -105,6 +106,29 @@ public class EmployeeController {
             response.setSuccess(true);
             response.setDescription("The employee found");
             response.setData(employeeList);
+
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        }
+    }
+
+    @PutMapping("")
+    public ResponseEntity<DataResponse> updateEmployee(@RequestBody EmployeeRequest employeeRequest) {
+        boolean isUpdated = employeeService.updateEmployee(employeeRequest);
+
+        DataResponse response = new DataResponse();
+
+        if (isUpdated) {
+            response.setStatusCode(HttpStatus.OK.value());
+            response.setSuccess(true);
+            response.setDescription("Employee updated");
+            response.setData(employeeRequest);
+
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        } else {
+            response.setStatusCode(HttpStatus.NOT_FOUND.value());
+            response.setSuccess(false);
+            response.setDescription("Update failed");
+            response.setData(null);
 
             return ResponseEntity.status(HttpStatus.OK).body(response);
         }

@@ -1,7 +1,9 @@
 package com.example.ministop.service;
 
 import com.example.ministop.entity.Employee;
+import com.example.ministop.entity.EmployeeRole;
 import com.example.ministop.payload.request.EmployeeLoginRequest;
+import com.example.ministop.payload.request.EmployeeRequest;
 import com.example.ministop.payload.response.EmployeeResponse;
 import com.example.ministop.repository.EmployeeRepository;
 import com.example.ministop.repository.EmployeeRoleRepository;
@@ -87,5 +89,36 @@ public class EmployeeImp implements EmployeeService {
         }
 
         return employeesResponseList;
+    }
+
+    @Override
+    public boolean updateEmployee(EmployeeRequest employeeRequest) {
+        if (employeeRequest.getRoleId() == null) {
+            return false;
+        }
+
+        Employee existing = employeeRepository.findById(employeeRequest.getId()).orElse(null);
+
+        if (existing == null) {
+            return false;
+        }
+
+        existing.setFullName(employeeRequest.getName());
+        existing.setBirthDate(employeeRequest.getBirthDate());
+        existing.setGender(employeeRequest.getGender());
+        existing.setPhoneNumber(employeeRequest.getPhoneNumber());
+
+        if (employeeRequest.getRoleId() != null) {
+            EmployeeRole role = employeeRoleRepository.findById(employeeRequest.getRoleId()).orElse(null);
+
+            if (role == null) {
+                return false;
+            } else {
+                existing.setEmployeeRole(role);
+            }
+        }
+
+        employeeRepository.save(existing);
+        return true;
     }
 }
