@@ -14,5 +14,5 @@ public interface EmployeeService {
     List<EmployeeResponse> getAnEmployee(String id);
     boolean updateEmployee(EmployeeRequest employeeRequest);
     boolean deleteEmployee(String id);
-    List<Employee> searchEmployees(String keyword);
+    List<EmployeeResponse> searchEmployees(String keyword);
 }

@@ -161,7 +161,7 @@ public class EmployeeController {
     public ResponseEntity<DataResponse> searchEmployees(
             @RequestParam String keyword
     ) {
-        List<Employee> employees = employeeService.searchEmployees(keyword);
+        List<EmployeeResponse> employees = employeeService.searchEmployees(keyword);
 
         DataResponse response = new DataResponse();
 

@@ -133,7 +133,20 @@ public class EmployeeImp implements EmployeeService {
     }
 
     @Override
-    public List<Employee> searchEmployees(String keyword) {
-        return employeeRepository.searchAllFields(keyword);
+    public List<EmployeeResponse> searchEmployees(String keyword) {
+        List<EmployeeResponse> employeesResponseList = new ArrayList<>();
+        for (Employee employee : employeeRepository.searchAllFields(keyword)) {
+            employeesResponseList.add(
+                    new EmployeeResponse(
+                            employee.getEmployeeId(),
+                            employee.getFullName(),
+                            employee.getBirthDate(),
+                            employee.getGender(),
+                            employee.getPhoneNumber(),
+                            employee.getEmployeeRole().getRoleName()
+                    )
+            );
+        }
+        return employeesResponseList;
     }
 }
