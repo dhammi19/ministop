@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class EmployeeRoleImp implements EmployeeRoleService{
+public class EmployeeRoleServiceImp implements EmployeeRoleService{
     @Autowired
     EmployeeRoleRepository employeeRoleRepository;
 
